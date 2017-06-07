@@ -1,11 +1,15 @@
 #!/usr/bin/python
 
-import PyQt5
 from vk_helper import _vk_autorization
 from vk_account import LOGIN, PASSWORD
-import pandas as pd
 from csv_helper import USERS, LOCATIONS, add_user, add_location, SEP
+
+from windows import MainWindow
+
+from PyQt5.QtWidgets import QApplication
 import os
+import pandas as pd
+import sys
 
 
 def main():
@@ -17,11 +21,9 @@ def main():
         pd.DataFrame(columns=['Name', 'ID']).to_csv(USERS,
                                                     index=False,
                                                     sep=SEP)
-
-    vk = _vk_autorization(LOGIN, PASSWORD)
-    add_location('Joke', ['3', '2'])
-    users = pd.read_csv(LOCATIONS, sep=SEP)
-    print(users.values)
+    app = QApplication(sys.argv)
+    main_window = MainWindow()
+    sys.exit(app.exec_())
 
 if __name__ == '__main__':
     main()
