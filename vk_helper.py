@@ -29,10 +29,10 @@ def send_roles(login, password, users_id, location, roles):
     """
     vk = _vk_autorization(login, password)
     for user, role in zip(users_id, roles):
-        message = "Твоя роль: {}".format(role, location)
+        message = "Твоя роль: {}".format(role)
         if role == SPY:
             _write_vk_message(vk, user, message)
         else:
-            message += "\nТекущая локация: {}".format(role, location)
+            message += "\nТекущая локация: {}".format(location)
             _write_vk_message(vk, user, message)
         time.sleep(0.5)
