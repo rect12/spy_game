@@ -2,9 +2,10 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget
 
 
 class BaseWindow(QWidget):
-    def __init__(self, title):
+    def __init__(self, game, title):
         super().__init__()
 
+        self.game = game
         self.buttons = {}
         self.buttons_size = (100, 50)
         self.pad = (30, 20)

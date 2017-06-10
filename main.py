@@ -5,6 +5,7 @@ from vk_account import LOGIN, PASSWORD
 from csv_helper import USERS, LOCATIONS, add_user, add_location, SEP
 
 from windows import MainWindow
+from game import Game
 
 from PyQt5.QtWidgets import QApplication
 import os
@@ -22,7 +23,7 @@ def main():
                                                     index=False,
                                                     sep=SEP)
     app = QApplication(sys.argv)
-    main_window = MainWindow()
+    game = Game()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
