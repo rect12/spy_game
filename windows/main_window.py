@@ -15,7 +15,7 @@ class MainWindow(BaseWindow):
                     self.buttons_number * self.buttons_size[1])
 
     def init_buttons(self):
-        name = WINDOWS[1:]
+        names = WINDOWS[1:]
         click_functions = [WindowChange(self, self.game.windows['player options'])]
         click_functions += [lambda x: None] * 3
 

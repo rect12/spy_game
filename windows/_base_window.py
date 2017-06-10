@@ -12,8 +12,10 @@ class BaseWindow(QWidget):
 
         self.setWindowTitle(title)
         self.set_geometry()
-        self.init_buttons()
         self.center()
+
+    def _post_init(self):
+        self.init_buttons()
 
     def center(self):
         qr = self.frameGeometry()

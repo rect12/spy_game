@@ -1,4 +1,4 @@
-WINDOWS = ['main window', 'player options', 'game options',
+WINDOWS = ['main', 'player options', 'game options',
            'setting options', 'game']
 
 
