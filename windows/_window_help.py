@@ -10,3 +10,13 @@ class WindowChange:
     def __call__(self):
         self.first_window.hide()
         self.second_window.show()
+
+
+class StartGame:
+    def __init__(self, game):
+        self.game = game
+
+    def __call__(self):
+        for window in self.game.windows.values():
+            window.hide()
+        self.game.windows['game'].show()
