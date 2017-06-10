@@ -16,4 +16,3 @@ class GameWindow(BaseWindow):
         self.init_button('to main page',
                          WindowChange(self, self.game.windows['main']),
                          place)
-
