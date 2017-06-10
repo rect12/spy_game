@@ -16,8 +16,8 @@ class MainWindow(BaseWindow):
 
     def init_buttons(self):
         names = WINDOWS[1:]
-        click_functions = [WindowChange(self, self.game.windows['player options'])]
-        click_functions += [lambda x: None] * 3
+        click_functions = [WindowChange(self, self.game.windows[name])
+                           for name in names]
 
         for ind, (name, click_func) in enumerate(zip(names, click_functions)):
             vertical_size = self.buttons_size[1] + self.pad[1]
