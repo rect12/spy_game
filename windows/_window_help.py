@@ -1,5 +1,7 @@
 WINDOWS = ['main', 'player options', 'game options',
            'setting options', 'game']
+LOCATION = 'Локация'
+ROLE = 'Роль'
 
 
 class WindowChange:
@@ -43,11 +45,13 @@ class AddNewLine:
         self.line_edit = line_edit
 
     def __call__(self):
-        self.window.init_new_line()
+        self.line_edit.textEdited.disconnect()
         self.line_edit.textEdited.connect(lambda x: None)
+        self.window.init_new_line()
 
 
 class DeleteDefaultText:
+    # Doesn't work yet
     def __init__(self, line_edit, default_text):
         self.line_edit = line_edit
         self.default_text = default_text
@@ -58,12 +62,12 @@ class DeleteDefaultText:
             self.line_edit.clear()
             print('delete', text)
             event_function = ReturnDefaultText(self.line_edit, text)
-
-            self.line_edit.cursorPositionChanged.connect(lambda x: None)
+            self.line_edit.cursorPositionChanged.disconnect()
             self.line_edit.editingFinished.connect(event_function)
 
 
 class ReturnDefaultText:
+    # Doesn't work yet
     def __init__(self, line_edit, default_text):
         self.line_edit = line_edit
         self.default_text = default_text
@@ -74,4 +78,4 @@ class ReturnDefaultText:
             self.line_edit.setText(self.default_text)
             event_function = DeleteDefaultText(self.line_edit, self.default_text)
             self.line_edit.cursorPositionChanged.connect(event_function)
-            self.line_edit.editingFinished.connect(lambda: None)
+            self.line_edit.editingFinished.disconnect()

@@ -22,9 +22,9 @@ def main():
         pd.DataFrame(columns=['Name', 'ID']).to_csv(USERS,
                                                     index=False,
                                                     sep=SEP)
-    app = QApplication(sys.argv)
-    game = Game()
-    sys.exit(app.exec_())
+    application = QApplication(sys.argv)
+    game = Game(application)
+    sys.exit(application.exec_())
 
 if __name__ == '__main__':
     main()

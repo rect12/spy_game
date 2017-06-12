@@ -4,8 +4,9 @@ from windows import GameWindow
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, application):
         self.players = []
+        self.application = application
 
         windows = [MainWindow, PlayerOptionsWindow, GameOptionsWindow,
                    SettingOptionsWindow, GameWindow]

@@ -1,5 +1,6 @@
 from ._base_options import BaseOptionsWindow
 from ._window_help import UpdatePlayerState, AddNewLine, DeleteDefaultText
+from ._window_help import LOCATION, ROLE
 
 from importlib.machinery import SourceFileLoader
 from PyQt5.QtWidgets import QLineEdit, QCheckBox
@@ -62,11 +63,16 @@ class SettingOptionsWindow(BaseOptionsWindow):
         self.resize(x_size, y_size)
 
     def init_location_line(self):
-        default_text = 'Локация'
-        self.init_line_edit(default_text, self.pad, AddNewLine)
-        event_function = DeleteDefaultText(self.line_edits[-1], default_text)
-        # self.line_edits[-1].cursorPositionChanged.connect(event_function)
+        self.init_line_edit(LOCATION, self.pad, AddNewLine)
+        event_function = DeleteDefaultText(self.line_edits[-1], LOCATION)
+        self.line_edits[-1].cursorPositionChanged.connect(event_function)
         self.set_geometry()
 
     def init_new_line(self):
-        pass
+        shift = self.line_edit_size[1] + self.pad[1]
+        y_move = len(self.line_edits)*shift + self.pad[1]
+        self.init_line_edit(ROLE, [self.pad[0], y_move], AddNewLine)
+        event_function = DeleteDefaultText(self.line_edits[-1], ROLE)
+        self.line_edits[-1].cursorPositionChanged.connect(event_function)
+
+        self.recover_geometry()
