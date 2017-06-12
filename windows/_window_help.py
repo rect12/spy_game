@@ -35,3 +35,43 @@ class UpdatePlayerState:
             self.po_window.game.players.append((name, user_id))
         else:
             self.po_window.game.players.remove((name, user_id))
+
+
+class AddNewLine:
+    def __init__(self, line_edit):
+        self.window = line_edit.parent()
+        self.line_edit = line_edit
+
+    def __call__(self):
+        self.window.init_new_line()
+        self.line_edit.textEdited.connect(lambda x: None)
+
+
+class DeleteDefaultText:
+    def __init__(self, line_edit, default_text):
+        self.line_edit = line_edit
+        self.default_text = default_text
+
+    def __call__(self):
+        text = self.line_edit.text()
+        if text == self.default_text:
+            self.line_edit.clear()
+            print('delete', text)
+            event_function = ReturnDefaultText(self.line_edit, text)
+
+            self.line_edit.cursorPositionChanged.connect(lambda x: None)
+            self.line_edit.editingFinished.connect(event_function)
+
+
+class ReturnDefaultText:
+    def __init__(self, line_edit, default_text):
+        self.line_edit = line_edit
+        self.default_text = default_text
+
+    def __call__(self):
+        if self.line_edit.text() == '':
+            print('return', self.default_text)
+            self.line_edit.setText(self.default_text)
+            event_function = DeleteDefaultText(self.line_edit, self.default_text)
+            self.line_edit.cursorPositionChanged.connect(event_function)
+            self.line_edit.editingFinished.connect(lambda: None)
