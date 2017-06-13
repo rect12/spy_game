@@ -89,5 +89,5 @@ class ReturnDefaultText:
 
 def update_csv(game):
     csv.add_location(game.location, game.roles)
-    all_players = game.get_all_players()
+    all_players = game.get_players(True)
     csv._to_csv(csv.USERS, all_players)

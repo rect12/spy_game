@@ -18,34 +18,25 @@ class Game:
             window._post_init()
 
     def set_parametrs(self):
-        self.set_location()
-        self.set_roles()
-        self.set_players()
+        self.location = self.get_location()
+        self.role = self.get_roles()
+        self.players = self.get_players(False)
 
-    def set_location(self):
-        self.location = self.windows['setting options'].line_edits[0].text()
+    def get_location(self):
+        return self.windows['setting options'].line_edits[0].text()
 
-    def set_roles(self):
-        for line_edit in self.windows['setting options'].line_edits[1:-1]:
-            self.roles.append(line_edit.text())
+    def get_roles(self):
+        return [line_edit.text()
+                for line_edit
+                in self.windows['setting options'].line_edits[1:-1]]
 
-    def set_players(self):
+    def get_players(self, need_all):
+        players = []
         po_window = self.windows['player options']
         for player_ind in range(len(po_window.line_edits) // 2 - 1):
             name = po_window.line_edits[2*player_ind].text()
             user_id = po_window.line_edits[2*player_ind + 1].text()
 
-            if po_window.check_boxes[player_ind].isChecked():
-                self.players.append([name, user_id])
-
-    def get_all_players(self):
-        all_players = []
-        po_window = self.windows['player options']
-        for player_ind in range(len(po_window.line_edits) // 2 - 1):
-            name = po_window.line_edits[2*player_ind].text()
-            user_id = po_window.line_edits[2*player_ind + 1].text()
-
-            all_players.append([name, user_id])
-
-        return all_players
-
+            if need_all or po_window.check_boxes[player_ind].isChecked():
+                players.append([name, user_id])
+        return players
