@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QLineEdit, QCheckBox
 
 import pandas as pd
 
+
 csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
 
 

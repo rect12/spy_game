@@ -1,3 +1,9 @@
+from importlib.machinery import SourceFileLoader
+import pandas as pd
+
+
+csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
+
 WINDOWS = ['main', 'player options', 'game options',
            'setting options', 'game']
 LOCATION = 'Локация'
@@ -25,6 +31,7 @@ class StartGame:
             window.hide()
         self.game.windows['game'].show()
         self.game.set_parametrs()
+        update_csv(self.game)
 
 
 class UpdatePlayerState:
@@ -78,3 +85,9 @@ class ReturnDefaultText:
             event_function = DeleteDefaultText(self.line_edit, self.default_text)
             self.line_edit.cursorPositionChanged.connect(event_function)
             self.line_edit.editingFinished.disconnect()
+
+
+def update_csv(game):
+    csv.add_location(game.location, game.roles)
+    all_players = game.get_all_players()
+    csv._to_csv(csv.USERS, all_players)

@@ -31,9 +31,21 @@ class Game:
 
     def set_players(self):
         po_window = self.windows['player options']
-        for player_ind in range(len(po_window.line_edits) // 2):
+        for player_ind in range(len(po_window.line_edits) // 2 - 1):
             name = po_window.line_edits[2*player_ind].text()
             user_id = po_window.line_edits[2*player_ind + 1].text()
 
             if po_window.check_boxes[player_ind].isChecked():
-                self.players.append((name, user_id))
+                self.players.append([name, user_id])
+
+    def get_all_players(self):
+        all_players = []
+        po_window = self.windows['player options']
+        for player_ind in range(len(po_window.line_edits) // 2 - 1):
+            name = po_window.line_edits[2*player_ind].text()
+            user_id = po_window.line_edits[2*player_ind + 1].text()
+
+            all_players.append([name, user_id])
+
+        return all_players
+

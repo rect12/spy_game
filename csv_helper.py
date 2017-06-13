@@ -41,3 +41,9 @@ def _add_to_csv(path, row):
         old_dataframe = old_dataframe.append(new_row,
                                              ignore_index=True)
         old_dataframe.to_csv(path, sep=SEP, index=False, mode='w')
+
+def _to_csv(path, data):
+    old_dataframe = pd.read_csv(path, sep=SEP, header=0)
+    columns = old_dataframe.columns
+    new_dataframe = pd.DataFrame(data, columns=columns)
+    new_dataframe.to_csv(path, sep=SEP, index=False, header=True)
