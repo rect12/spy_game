@@ -26,18 +26,22 @@ class BaseOptionsWindow(BaseWindow):
                          places[1])
         self.init_button('start game', StartGame(self.game), places[0])
 
-    def init_line_edit(self, text, place, edit_class):
+    def init_line_edit(self, text, place, edit_class=None):
         self.line_edits.append(QLineEdit(str(text), self))
         self.line_edits[-1].resize(*self.line_edit_size)
         self.line_edits[-1].move(*place)
-        self.line_edits[-1].textEdited.connect(edit_class(self.line_edits[-1]))
+        if edit_class is not None:
+            edit_function = edit_class(self.line_edits[-1])
+            self.line_edits[-1].textEdited.connect(edit_function)
         self.line_edits[-1].show()
 
-    def init_check_box(self, place, click_function):
+    def init_check_box(self, place, click_function=None):
         self.check_boxes.append(QCheckBox(self))
         self.check_boxes[-1].move(*place)
         self.check_boxes[-1].resize(*self.check_box_size)
-        self.check_boxes[-1].stateChanged.connect(click_function)
+        if click_function is not None:
+            self.check_boxes[-1].stateChanged.connect(click_function)
+        self.check_boxes[-1].show()
 
     def recover_geometry(self):
         self.set_geometry()

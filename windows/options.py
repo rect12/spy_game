@@ -1,6 +1,6 @@
 from ._base_options import BaseOptionsWindow
 from ._window_help import UpdatePlayerState, AddNewLine, DeleteDefaultText
-from ._window_help import LOCATION, ROLE
+from ._window_help import LOCATION, ROLE, NAME, ID
 
 from importlib.machinery import SourceFileLoader
 from PyQt5.QtWidgets import QLineEdit, QCheckBox
@@ -28,17 +28,28 @@ class PlayerOptionsWindow(BaseOptionsWindow):
         players = pd.read_csv(csv.USERS, header=0, sep=csv.SEP).values
 
         for ind_y, (name, user_id) in enumerate(players):
-            for ind_x, text in enumerate([name, user_id]):
-                 move = [pad + ind*(pad+size) for pad, ind, size
-                         in zip(self.pad, [ind_x, ind_y], self.line_edit_size)]
-                 self.init_line_edit(text, move, lambda x: lambda x: None)
+            self.init_new_line(name, user_id, False)
+        self.init_new_line(need_check_box=False)
 
+    def init_new_line(self, name=NAME, user_id=ID, is_last=True,
+                      need_check_box=True):
+        # TODO: rewrite this somehow
+        ind_y = len(self.line_edits) // 2
+        for ind_x, text in enumerate([name, user_id]):
+             move = [pad + ind*(pad+size) for pad, ind, size
+                     in zip(self.pad, [ind_x, ind_y], self.line_edit_size)]
+             edit_class = AddNewLine if is_last and ind_x == 0 else None
+             self.init_line_edit(text, move, edit_class)
 
-            move[0] += self.pad[0] + self.line_edit_size[0]
-            click_function = UpdatePlayerState(self, ind_y)
-            self.init_check_box(move, click_function)
+        if need_check_box:
+            move = [self.pad[0]*3 + self.line_edit_size[0]*2,
+                    ind_y*(self.pad[1] + self.line_edit_size[1]) +
+                    self.pad[1]]
+            if is_last:
+                move[1] -= self.pad[1] + self.line_edit_size[1]
+            self.init_check_box(move)
 
-        self.set_geometry()
+        self.recover_geometry()
 
 
 class GameOptionsWindow(BaseOptionsWindow):
