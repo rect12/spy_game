@@ -61,8 +61,8 @@ class GameOptionsWindow(BaseOptionsWindow):
 
     def set_geometry(self):
         # TODO write this correctly
-        self.resize(self.label_size[0]+self.pad[0]*3+self.line_edit_size[0],
-                    300)
+        self.resize(self.label_size[0] + self.pad[0]*3 +
+                    self.line_edit_size[0], 300)
 
     def init_time_options(self):
         label_place = [self.pad[0], self.pad[1]*2 + self.label_size[1]]
