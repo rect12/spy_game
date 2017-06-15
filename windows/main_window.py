@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget
 from ._base_window import BaseWindow
-from ._window_help import WINDOWS, WindowChange, StartGame
+from ._window_help import WINDOWS, WindowChange, ToGame
 
 
 class MainWindow(BaseWindow):
@@ -18,7 +18,7 @@ class MainWindow(BaseWindow):
         names = WINDOWS[1:]
         click_functions = [WindowChange(self, self.game.windows[name])
                            for name in names[:-1]]
-        click_functions.append(StartGame(self.game))
+        click_functions.append(ToGame(self.game))
 
         for ind, (name, click_func) in enumerate(zip(names, click_functions)):
             vertical_size = self.buttons_size[1] + self.pad[1]

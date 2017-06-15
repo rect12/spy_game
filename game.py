@@ -32,6 +32,9 @@ class Game:
                 for line_edit
                 in self.windows['setting options'].line_edits[1:-1]]
 
+    def get_duration(self):
+        return int(self.windows['game options'].line_edits[0].text())
+
     def get_players(self, need_all):
         players = []
         po_window = self.windows['player options']
@@ -43,7 +46,7 @@ class Game:
                 players.append([name, user_id])
         return players
 
-    def start_game(self):
+    def to_game(self):
         self.set_parametrs()
         self.roles.append(SPY)
         shuffle(self.roles)

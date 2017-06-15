@@ -1,9 +1,8 @@
 from ._base_options import BaseOptionsWindow
-from ._window_help import UpdatePlayerState, AddNewLine, DeleteDefaultText
-from ._window_help import LOCATION, ROLE, NAME, ID
+from ._window_help import *
 
 from importlib.machinery import SourceFileLoader
-from PyQt5.QtWidgets import QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QLineEdit, QCheckBox, QLabel
 
 import pandas as pd
 
@@ -55,10 +54,23 @@ class PlayerOptionsWindow(BaseOptionsWindow):
 
 class GameOptionsWindow(BaseOptionsWindow):
     def __init__(self, game):
-        super().__init__(game, 'Game options')
+        self.label_size = (230, 30)
+
+        super().__init__(game, 'Game options', (30, 30))
+        self.init_label('error', self.pad, '')
+        self.init_time_options()
 
     def set_geometry(self):
-        self.resize(300, 300)
+        # TODO write this correctly
+        self.resize(self.label_size[0] + self.pad[0]*3 + self.line_edit_size[0],
+                    300)
+
+    def init_time_options(self):
+        label_place = [self.pad[0], self.pad[1]*2 + self.label_size[1]]
+        self.init_label('Длительность игры (в минутах)', label_place)
+        place = [self.pad[0]*2 + self.label_size[0],
+                 label_place[1]]
+        self.init_line_edit('10', place, AllowOnlyNumbers)
 
 
 class SettingOptionsWindow(BaseOptionsWindow):

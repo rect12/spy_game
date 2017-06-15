@@ -1,5 +1,6 @@
 from importlib.machinery import SourceFileLoader
 import pandas as pd
+import time
 
 
 csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
@@ -23,7 +24,7 @@ class WindowChange:
         self.second_window.show()
 
 
-class StartGame:
+class ToGame:
     def __init__(self, game):
         self.game = game
 
@@ -33,7 +34,7 @@ class StartGame:
         self.game.windows['game'].show()
         update_csv(self.game)
 
-        self.game.start_game()
+        self.game.to_game()
 
 
 class UpdatePlayerState:
@@ -51,11 +52,13 @@ class UpdatePlayerState:
             self.po_window.game.players.remove((name, user_id))
 
 
-class AddNewLine:
+class BaseTextEditFunction:
     def __init__(self, line_edit):
         self.window = line_edit.parent()
         self.line_edit = line_edit
 
+
+class AddNewLine(BaseTextEditFunction):
     def __call__(self):
         self.line_edit.textEdited.disconnect()
         self.line_edit.textEdited.connect(lambda x: None)
@@ -89,7 +92,57 @@ class ReturnDefaultText:
             self.line_edit.editingFinished.disconnect()
 
 
+class AllowOnlyNumbers(BaseTextEditFunction):
+    def __call__(self):
+        if self.line_edit.text().isdigit():
+            error = ''
+        else:
+            self.line_edit.setText('')
+            error = 'Time should be an integer'
+
+        self.window.labels['error'].setText(error)
+
+
+class Timer:
+    def __init__(self, epoch_duration, epoch_number, place,
+                 parent, end_epoch_function=None):
+        self.epoch_duration = epoch_duration
+        self.epoch_number = epoch_number
+        self.end_epoch_function = end_epoch_function
+        self.parent = parent
+        self.time_left = 0
+        self.parent.init_label('timer', place, self.get_time_left_str())
+        button_place = [place[0] + self.parent.label_size[0]/2 -
+                        parent.buttons_size[0]/2,
+                        place[1] + parent.label_size[1] + parent.pad[1]]
+        self.parent.init_button('START', self.run, button_place)
+
+    def run(self):
+        self.time_left = self.epoch_number * self.epoch_duration
+        for epoch_index in range(self.epoch_number):
+            for _ in range(self.epoch_duration):
+                label = self.parent.labels['timer']
+                label.setText(self.get_time_left_str())
+                self.parent.game.application.processEvents()
+                # print(self.parent.labels['timer'].text())
+                time.sleep(0.9999) # TODO calculate it properly
+                self.time_left -= 1
+            if self.end_epoch_function is not None:
+                self.end_epoch_function(self.time_left)
+
+    def get_time_left_str(self):
+        return seconds_to_time(self.time_left)
+
+
 def update_csv(game):
     csv.add_location(game.get_location(), game.get_roles())
     all_players = game.get_players(True)
     csv._to_csv(csv.USERS, all_players)
+
+def seconds_to_time(time):
+    minutes = add_zero(time // 60)
+    seconds = add_zero(time % 60)
+    return "{}:{}".format(minutes, seconds)
+
+def add_zero(value):
+    return str(value) if value > 9 else '0' + str(value)

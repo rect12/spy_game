@@ -1,14 +1,14 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QLineEdit, QCheckBox
 from ._base_window import BaseWindow
-from ._window_help import WindowChange, StartGame
+from ._window_help import WindowChange, ToGame
 
 
 class BaseOptionsWindow(BaseWindow):
-    def __init__(self, game, title):
+    def __init__(self, game, title, line_edit_size=(130, 30)):
         self.line_edits = []
         self.check_boxes = []
 
-        self.line_edit_size = (100, 30)
+        self.line_edit_size = line_edit_size
         self.check_box_size = (30, 30)
 
         super().__init__(game, title)
@@ -24,7 +24,7 @@ class BaseOptionsWindow(BaseWindow):
         self.init_button('to main page',
                          WindowChange(self, self.game.windows['main']),
                          places[1])
-        self.init_button('start game', StartGame(self.game), places[0])
+        self.init_button('to game', ToGame(self.game), places[0])
 
     def init_line_edit(self, text, place, edit_class=None):
         self.line_edits.append(QLineEdit(str(text), self))
