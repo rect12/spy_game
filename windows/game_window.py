@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import QWidget, QPushButton
 from PyQt5.QtGui import QFont
 from ._base_window import BaseWindow
 from ._window_help import WindowChange, Timer

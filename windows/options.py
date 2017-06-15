@@ -2,7 +2,6 @@ from ._base_options import BaseOptionsWindow
 from ._window_help import *
 
 from importlib.machinery import SourceFileLoader
-from PyQt5.QtWidgets import QLineEdit, QCheckBox, QLabel
 
 import pandas as pd
 
@@ -36,10 +35,10 @@ class PlayerOptionsWindow(BaseOptionsWindow):
         # TODO: rewrite this somehow
         ind_y = len(self.line_edits) // 2
         for ind_x, text in enumerate([name, user_id]):
-             move = [pad + ind*(pad+size) for pad, ind, size
-                     in zip(self.pad, [ind_x, ind_y], self.line_edit_size)]
-             edit_class = AddNewLine if is_last and ind_x == 0 else None
-             self.init_line_edit(text, move, edit_class)
+            move = [pad + ind*(pad+size) for pad, ind, size
+                    in zip(self.pad, [ind_x, ind_y], self.line_edit_size)]
+            edit_class = AddNewLine if is_last and ind_x == 0 else None
+            self.init_line_edit(text, move, edit_class)
 
         if need_check_box:
             move = [self.pad[0]*3 + self.line_edit_size[0]*2,
@@ -62,7 +61,7 @@ class GameOptionsWindow(BaseOptionsWindow):
 
     def set_geometry(self):
         # TODO write this correctly
-        self.resize(self.label_size[0] + self.pad[0]*3 + self.line_edit_size[0],
+        self.resize(self.label_size[0]+self.pad[0]*3+self.line_edit_size[0],
                     300)
 
     def init_time_options(self):

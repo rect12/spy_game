@@ -1,5 +1,4 @@
 from importlib.machinery import SourceFileLoader
-import pandas as pd
 import time
 
 
@@ -87,7 +86,8 @@ class ReturnDefaultText:
     def __call__(self):
         if self.line_edit.text() == '':
             self.line_edit.setText(self.default_text)
-            event_function = DeleteDefaultText(self.line_edit, self.default_text)
+            event_function = DeleteDefaultText(self.line_edit,
+                                               self.default_text)
             self.line_edit.cursorPositionChanged.connect(event_function)
             self.line_edit.editingFinished.disconnect()
 
@@ -125,7 +125,7 @@ class Timer:
                 label.setText(self.get_time_left_str())
                 self.parent.game.application.processEvents()
                 # print(self.parent.labels['timer'].text())
-                time.sleep(0.9999) # TODO calculate it properly
+                time.sleep(0.9999)  # TODO calculate it properly
                 self.time_left -= 1
             if self.end_epoch_function is not None:
                 self.end_epoch_function(self.time_left)
@@ -139,10 +139,12 @@ def update_csv(game):
     all_players = game.get_players(True)
     csv._to_csv(csv.USERS, all_players)
 
+
 def seconds_to_time(time):
     minutes = add_zero(time // 60)
     seconds = add_zero(time % 60)
     return "{}:{}".format(minutes, seconds)
+
 
 def add_zero(value):
     return str(value) if value > 9 else '0' + str(value)

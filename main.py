@@ -1,10 +1,7 @@
 #!/usr/bin/python
 
-from vk_helper import _vk_autorization
-from vk_account import LOGIN, PASSWORD
-from csv_helper import USERS, LOCATIONS, add_user, add_location, SEP
+from csv_helper import USERS, LOCATIONS, SEP
 
-from windows import MainWindow
 from game import Game
 
 from PyQt5.QtWidgets import QApplication
@@ -25,6 +22,7 @@ def main():
     application = QApplication(sys.argv)
     game = Game(application)
     sys.exit(application.exec_())
+
 
 if __name__ == '__main__':
     main()

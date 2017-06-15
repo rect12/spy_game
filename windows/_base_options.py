@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QLineEdit, QCheckBox
 from ._base_window import BaseWindow
 from ._window_help import WindowChange, ToGame
 

@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget
 from ._base_window import BaseWindow
 from ._window_help import WINDOWS, WindowChange, ToGame
 

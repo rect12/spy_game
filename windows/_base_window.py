@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget, QLabel
 from PyQt5.QtGui import QFont
 import PyQt5.QtCore as QtCore
 
+
 class BaseWindow(QWidget):
     def __init__(self, game, title):
         # TODO: rewrite all size params to init arguments.
