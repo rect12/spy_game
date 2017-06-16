@@ -53,3 +53,4 @@ class BaseWindow(QWidget):
         self.labels[name].resize(*self.label_size)
         self.labels[name].setFont(self.label_font)
         self.labels[name].setAlignment(QtCore.Qt.AlignCenter)
+        self.labels[name].show()

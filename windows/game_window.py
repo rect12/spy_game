@@ -9,7 +9,7 @@ class GameWindow(BaseWindow):
 
         self.label_size = (200, 50)
         self.label_font = QFont('Times', 20)
-        self.epoch_duration = 60
+        self.epoch_duration = 2
 
     def set_geometry(self):
         self.resize(300, 300)
