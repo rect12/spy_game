@@ -52,3 +52,5 @@ class Game:
         shuffle(self.roles)
         send_roles(LOGIN, PASSWORD, [player[1] for player in self.players],
                    self.location, self.roles)
+
+        self.windows['game'].to_game()

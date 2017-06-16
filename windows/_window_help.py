@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QTimer
 from importlib.machinery import SourceFileLoader
 import time
 
@@ -107,28 +108,34 @@ class Timer:
     def __init__(self, epoch_duration, epoch_number, place,
                  parent, end_epoch_function=None):
         self.epoch_duration = epoch_duration
-        self.epoch_number = epoch_number
         self.end_epoch_function = end_epoch_function
+        self.epoch_number = epoch_number
         self.parent = parent
-        self.time_left = 0
+        self.init_gui(place)
+        self.init_timer()
+
+    def init_gui(self, place):
         self.parent.init_label('timer', place, self.get_time_left_str())
         button_place = [place[0] + self.parent.label_size[0]/2 -
-                        parent.buttons_size[0]/2,
-                        place[1] + parent.label_size[1] + parent.pad[1]]
+                        self.parent.buttons_size[0]/2,
+                        place[1] + self.parent.label_size[1] + self.parent.pad[1]]
         self.parent.init_button('START', self.run, button_place)
 
+    def init_timer(self):
+        self.small_timer = QTimer()
+        self.small_timer.timeout.connect(self.tick)
+        self.small_timer.setInterval(999.9) # in ms
+
     def run(self):
-        self.time_left = self.epoch_number * self.epoch_duration
         for epoch_index in range(self.epoch_number):
             for _ in range(self.epoch_duration):
-                label = self.parent.labels['timer']
-                label.setText(self.get_time_left_str())
-                self.parent.game.application.processEvents()
-                # print(self.parent.labels['timer'].text())
-                time.sleep(0.9999)  # TODO calculate it properly
-                self.time_left -= 1
+                self.small_timer.start()
             if self.end_epoch_function is not None:
-                self.end_epoch_function(self.time_left)
+                self.end_epoch_function(self.epoch_number - epoch_index - 1)
+
+    def tick(self):
+        label = self.parent.labels['timer']
+        label.setText(self.get_time_left_str())
 
     def get_time_left_str(self):
         return seconds_to_time(self.time_left)
