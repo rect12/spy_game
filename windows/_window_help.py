@@ -105,16 +105,20 @@ class AllowOnlyNumbers(BaseTextEditFunction):
 
 
 class Timer:
-    def __init__(self, epoch_duration, epoch_number, place,
-                 parent, end_epoch_function=None, end_function=None):
+    def __init__(self, epoch_duration, place, parent,
+                 end_epoch_function=None, end_function=None,
+                 start_funcion=None):
         self.time_left = 0
         self.epoch_duration = epoch_duration
         self.end_epoch_function = end_epoch_function
-        self.epoch_number = epoch_number
         self.end_function = end_function
+        self.start_funcion = start_funcion
         self.parent = parent
         self.init_gui(place)
         self.init_timers()
+
+    def set_epoch_number(self, epoch_number):
+        self.epoch_number = epoch_number
 
     def init_gui(self, place):
         self.parent.init_label('timer', place, self.get_time_left_str())
@@ -132,12 +136,16 @@ class Timer:
 
         self.epoch_timer = QTimer()
         if self.end_epoch_function is not None:
-            self.epoch_timer.timeout.connect(self.end_epoch_function)
+            event_function = lambda: self.end_epoch_function(self.time_left)
+            self.epoch_timer.timeout.connect(event_function)
         self.epoch_timer.setInterval(second * self.epoch_duration)
 
     def run(self):
         self.time_left = self.epoch_duration * self.epoch_number
         self.update_label()
+        if self.start_funcion is not None:
+            self.start_funcion()
+
         self.small_timer.start()
         self.epoch_timer.start()
 

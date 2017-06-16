@@ -9,7 +9,16 @@ class GameWindow(BaseWindow):
 
         self.label_size = (200, 50)
         self.label_font = QFont('Times', 20)
-        self.epoch_duration = 2
+
+    def _post_init(self):
+        super()._post_init()
+        place = [self.size().width()/2 - self.label_size[0]/2, self.pad[1]]
+        self.timer = Timer(self.game.epoch_duration,
+                           place,
+                           self,
+                           self.game.time_left_newsletter,
+                           self.game.game_over,
+                           self.buttons['to main'].hide)
 
     def set_geometry(self):
         self.resize(300, 300)
@@ -22,6 +31,4 @@ class GameWindow(BaseWindow):
                          place)
 
     def to_game(self):
-        place = [self.size().width()/2 - self.label_size[0]/2, self.pad[1]]
-        self.timer = Timer(self.epoch_duration, self.game.get_duration(),
-                           place, self)
+        self.timer.set_epoch_number(self.game.get_duration())

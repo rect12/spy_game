@@ -2,9 +2,6 @@ import vk_api
 import time
 
 
-SPY = 'Шпион'
-
-
 def _vk_autorization(login, password):
     """
     Returns client authtorized with login and password
@@ -23,16 +20,15 @@ def _write_vk_message(vk, user_id, message):
                'message': message})
 
 
-def send_roles(login, password, users_id, location, roles):
+def newsletter(vk_client, users_id, messages):
     """
-    Send roles to players with users_id
+    Sends messages to users with users_id.
+
+    If messages is str sends this message to all players
     """
-    vk = _vk_autorization(login, password)
-    for user, role in zip(users_id, roles):
-        message = "Твоя роль: {}".format(role)
-        if role == SPY:
-            _write_vk_message(vk, user, message)
-        else:
-            message += "\nТекущая локация: {}".format(location)
-            _write_vk_message(vk, user, message)
+    if isinstance(messages, str):
+        messages = [messages] * len(users_id)
+
+    for user_id, message in zip(users_id, messages):
+        _write_vk_message(vk_client, user_id, message)
         time.sleep(0.5)
