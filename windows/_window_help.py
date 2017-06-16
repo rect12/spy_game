@@ -118,13 +118,14 @@ class Timer:
         self.parent.init_label('timer', place, self.get_time_left_str())
         button_place = [place[0] + self.parent.label_size[0]/2 -
                         self.parent.buttons_size[0]/2,
-                        place[1] + self.parent.label_size[1] + self.parent.pad[1]]
+                        place[1] + self.parent.label_size[1] +
+                        self.parent.pad[1]]
         self.parent.init_button('START', self.run, button_place)
 
     def init_timer(self):
         self.small_timer = QTimer()
         self.small_timer.timeout.connect(self.tick)
-        self.small_timer.setInterval(999.9) # in ms
+        self.small_timer.setInterval(999.9)  # in ms
 
     def run(self):
         for epoch_index in range(self.epoch_number):
