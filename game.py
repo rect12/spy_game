@@ -1,10 +1,11 @@
-from windows import WINDOWS, MainWindow, PlayerOptionsWindow
-from windows import GameOptionsWindow, SettingOptionsWindow
-from windows import GameWindow
+from graphical_interface import WINDOWS, MainWindow, PlayerOptionsWindow
+from graphical_interface import GameOptionsWindow, SettingOptionsWindow
+from graphical_interface import GameWindow
 from vk_helper import newsletter, _vk_autorization
 from vk_account import PASSWORD, LOGIN
 
 from random import shuffle
+from csv_helper import GameData
 
 
 SPY = 'Шпион'
@@ -15,11 +16,15 @@ class Game:
         self.application = application
         self.vk_client = _vk_autorization(LOGIN, PASSWORD)
         self.epoch_duration = 60
+        self.data = GameData()
 
         windows = [MainWindow, PlayerOptionsWindow, GameOptionsWindow,
                    SettingOptionsWindow, GameWindow]
-        self.windows = {name: window(self)
-                        for name, window in zip(WINDOWS, windows)}
+        init_arguments = [{}, {'players': self.data.get_players()}] + [{}]*3
+
+        self.windows = {name: window(self, **kwargs)
+                        for name, window, kwargs
+                        in zip(WINDOWS, windows, init_arguments)}
 
         for window in self.windows.values():
             window._post_init()
@@ -90,3 +95,8 @@ class Game:
         message = ('Время вышло! Игра окончена. ' +
                    'Победил шпион - {}!'.format(spy_name))
         newsletter(self.vk_client, self.get_players_id(), message)
+
+    def update_data(self):
+        self.data.add_location(self.get_location(), self.get_roles())
+        all_players = self.get_players(True)
+        self.data.rewrite_players(all_players)

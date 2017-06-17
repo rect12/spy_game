@@ -10,9 +10,9 @@ csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
 
 
 class PlayerOptionsWindow(BaseOptionsWindow):
-    def __init__(self, game):
+    def __init__(self, game, players):
         super().__init__(game, 'Player options')
-        self.init_player_lines()
+        self.init_player_lines(players)
 
     def set_geometry(self):
         shift = self.line_edit_size[1] + self.pad[1]
@@ -23,9 +23,7 @@ class PlayerOptionsWindow(BaseOptionsWindow):
                   2*self.pad[0] + self.check_box_size[0])
         self.resize(x_size, y_size)
 
-    def init_player_lines(self):
-        players = pd.read_csv(csv.USERS, header=0, sep=csv.SEP).values
-
+    def init_player_lines(self, players):
         for ind_y, (name, user_id) in enumerate(players):
             self.init_new_line(name, user_id, False)
         self.init_new_line(need_check_box=False)

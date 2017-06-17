@@ -1,50 +1,61 @@
 import pandas as pd
 import numpy as np
+import os
 
 
-USERS = 'users.csv'
-LOCATIONS = 'locations.csv'
-ROLE_DELIMITER = '###'
-SEP = '\t'
+class GameData:
+    def __init__(self):
+        self.players_path = 'players.csv'
+        self.locations_path = 'locations.csv'
+        self.role_delimiter = '###'
+        self.separator = '\t'
+        self.location_columns = ['Location', 'Roles']
+        self.user_columns = ['Name', 'ID']
 
+        self.create_if_not_exist(self.players_path, self.user_columns)
+        self.create_if_not_exist(self.locations_path, self.location_columns)
 
-def add_user(name, ID):
-    """
-    Add user with ID.
+    def create_if_not_exist(self, path, columns):
+        if not os.path.exists(path):
+            pd.DataFrame(columns=columns).to_csv(path,
+                                                 index=False,
+                                                 sep=self.separator)
 
-    If user already was in dataset update ID to new.
-    """
-    _add_to_csv(USERS, [name, ID])
+    def add_location(self, location, roles):
+        """
+        Add location with roles.
 
+        If location already was in dataset update roles to new.
+        """
+        self._add_to_csv(self.locations_path,
+                         [location, self.role_delimiter.join(roles)],
+                         self.location_columns[0])
 
-def add_location(location, roles=[]):
-    """
-    Add location with roles.
+    def _add_to_csv(self, path, row, key_columns):
+        old_dataframe = pd.read_csv(path, sep=self.separator)
+        columns = old_dataframe.columns
+        keys = old_dataframe[key_columns].values.reshape(-1)
+        row_key = np.array((row[columns.index(key_column)]
+                            for key_column in key_columns))
 
-    If location already was in dataset update roles to new.
-    """
-    _add_to_csv(LOCATIONS, [location, ROLE_DELIMITER.join(roles)])
+        if row_key not in keys:
+            pd.DataFrame([row]).to_csv(path, sep=self.separator, mode='a',
+                                       index=False, header=False)
+        else:
+            matches = np.where(keys == row_key)[0]
+            old_dataframe.drop(matches, inplace=True)
+            new_row = pd.DataFrame([row], columns=columns)
+            old_dataframe = old_dataframe.append(new_row,
+                                                 ignore_index=True)
+            old_dataframe.to_csv(path, sep=self.separator, index=False,
+                                 mode='w')
 
+    def rewrite_players(self, data):
+        self._rewrite_csv(self.players_path, data, self.user_columns)
 
-def _add_to_csv(path, row):
-    old_dataframe = pd.read_csv(path, sep=SEP)
-    columns = old_dataframe.columns
-    keys = old_dataframe[columns[0]].values.reshape(-1)
+    def _rewrite_csv(self, path, data, columns):
+        new_dataframe = pd.DataFrame(data, columns=columns)
+        new_dataframe.to_csv(path, sep=self.separator, index=False, header=True)
 
-    if row[0] not in keys:
-        pd.DataFrame([row]).to_csv(path, sep=SEP, mode='a',
-                                   index=False, header=False)
-    else:
-        matches = np.where(keys == row[0])[0]
-        old_dataframe.drop(matches, inplace=True)
-        new_row = pd.DataFrame([row], columns=columns)
-        old_dataframe = old_dataframe.append(new_row,
-                                             ignore_index=True)
-        old_dataframe.to_csv(path, sep=SEP, index=False, mode='w')
-
-
-def _to_csv(path, data):
-    old_dataframe = pd.read_csv(path, sep=SEP, header=0)
-    columns = old_dataframe.columns
-    new_dataframe = pd.DataFrame(data, columns=columns)
-    new_dataframe.to_csv(path, sep=SEP, index=False, header=True)
+    def get_players(self):
+        return pd.read_csv(self.players_path, header=0, sep=self.separator).values

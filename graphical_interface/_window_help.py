@@ -3,7 +3,6 @@ from importlib.machinery import SourceFileLoader
 import time
 
 
-csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
 vk = SourceFileLoader('vk', 'vk_helper.py').load_module()
 
 WINDOWS = ['main', 'player options', 'game options',
@@ -32,7 +31,7 @@ class ToGame:
         for window in self.game.windows.values():
             window.hide()
         self.game.windows['game'].show()
-        update_csv(self.game)
+        self.game.update_data()
 
         self.game.to_game()
 
@@ -164,12 +163,6 @@ class Timer:
 
     def get_time_left_str(self):
         return seconds_to_time(self.time_left)
-
-
-def update_csv(game):
-    csv.add_location(game.get_location(), game.get_roles())
-    all_players = game.get_players(True)
-    csv._to_csv(csv.USERS, all_players)
 
 
 def seconds_to_time(time):
