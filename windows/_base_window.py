@@ -4,12 +4,12 @@ import PyQt5.QtCore as QtCore
 
 
 class BaseWindow(QWidget):
-    def __init__(self, game, title):
+    def __init__(self, view, title):
         # TODO: rewrite all size params to init arguments.
         # In _base_options same thing
         super().__init__()
 
-        self.game = game
+        self.view = view
         self.buttons = {}
         self.labels = {}
         self.label_font = QFont('Times', 10)

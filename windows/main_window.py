@@ -1,11 +1,11 @@
 from ._base_window import BaseWindow
-from ._window_help import WINDOWS, WindowChange, ToGame
+from ._window_help import WINDOWS
 
 
 class MainWindow(BaseWindow):
-    def __init__(self, game):
+    def __init__(self, view):
         self.buttons_number = 4
-        super().__init__(game, 'The Spy')
+        super().__init__(view, 'The Spy')
         self.show()
 
     def set_geometry(self):
@@ -14,10 +14,12 @@ class MainWindow(BaseWindow):
                     self.buttons_number * self.buttons_size[1])
 
     def init_buttons(self):
+        # TODO: BUGFIX!!! All options buttons shows last option
         names = WINDOWS[1:]
-        click_functions = [WindowChange(self, self.game.windows[name])
+        click_method = self.view.window_change
+        click_functions = [lambda: click_method(self, self.view.windows[name])
                            for name in names[:-1]]
-        click_functions.append(ToGame(self.game))
+        click_functions.append(self.view.to_game)
 
         for ind, (name, click_func) in enumerate(zip(names, click_functions)):
             vertical_size = self.buttons_size[1] + self.pad[1]

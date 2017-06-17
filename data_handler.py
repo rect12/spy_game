@@ -58,4 +58,11 @@ class DataHandler:
         new_dataframe.to_csv(path, sep=self.separator, index=False, header=True)
 
     def get_players(self):
-        return pd.read_csv(self.players_path, header=0, sep=self.separator).values
+        return pd.read_csv(self.players_path, header=0,
+                           sep=self.separator).values
+
+    def get_settings(self):
+        settings = pd.read_csv(self.locations_path, header=0,
+                               sep=self.separator).values
+        return [{'location': location, 'roles': roles.split(self.role_delimiter)}
+                for location, roles in settings]
