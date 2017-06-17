@@ -6,9 +6,6 @@ from importlib.machinery import SourceFileLoader
 import pandas as pd
 
 
-csv = SourceFileLoader('csv', 'csv_helper.py').load_module()
-
-
 class PlayerOptionsWindow(BaseOptionsWindow):
     def __init__(self, game, players):
         super().__init__(game, 'Player options')

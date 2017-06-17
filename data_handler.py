@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 
-class GameData:
+class DataHandler:
     def __init__(self):
         self.players_path = 'players.csv'
         self.locations_path = 'locations.csv'

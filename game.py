@@ -5,7 +5,7 @@ from vk_helper import newsletter, _vk_autorization
 from vk_account import PASSWORD, LOGIN
 
 from random import shuffle
-from csv_helper import GameData
+from data_handler import DataHandler
 
 
 SPY = 'Шпион'
@@ -16,7 +16,7 @@ class Game:
         self.application = application
         self.vk_client = _vk_autorization(LOGIN, PASSWORD)
         self.epoch_duration = 60
-        self.data = GameData()
+        self.data = DataHandler()
 
         windows = [MainWindow, PlayerOptionsWindow, GameOptionsWindow,
                    SettingOptionsWindow, GameWindow]
