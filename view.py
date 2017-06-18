@@ -5,7 +5,9 @@ from windows import WINDOWS, MainWindow, PlayerOptionsWindow
 from windows import GameOptionsWindow, SettingOptionsWindow
 from windows import GameWindow
 
+
 class View:
+    # TODO: add ability to switch windows while game is running
     def __init__(self, game, players, settings):
         self.game = game
         self.application = QApplication(sys.argv)
@@ -50,10 +52,11 @@ class View:
         for window in self.windows.values():
             window.hide()
 
-        self.windows['game'].to_game()
-        self.game.update_data()
-
         self.game.to_game()
+        self.windows['game'].to_game()
+
+    def game_over(self):
+        self.windows['game'].buttons['to main'].show()
 
     def add_new_line(self, line_edit, window):
         line_edit.textEdited.disconnect()
@@ -66,16 +69,20 @@ class View:
     def delete_default_text(self, line_edit, default_text):
         if line_edit.text() == default_text:
             line_edit.clear()
-            event_function = lambda: self.return_default_text(line_edit,
-                                                              default_text)
+
+            def event_function():
+                self.return_default_text(line_edit, default_text)
+
             line_edit.cursorPositionChanged.disconnect()
             line_edit.editingFinished.connect(event_function)
 
     def return_default_text(self, line_edit, default_text):
         if line_edit.text() == '':
             line_edit.setText(default_text)
-            event_function = lambda: self.delete_default_text(line_edit,
-                                                              default_text)
+
+            def event_function():
+                self.delete_default_text(line_edit, default_text)
+
             line_edit.cursorPositionChanged.connect(event_function)
             line_edit.editingFinished.disconnect()
 
@@ -87,3 +94,6 @@ class View:
             error = 'Time should be an integer'
 
         window.labels['error'].setText(error)
+
+    def start_game(self):
+        self.windows['game'].buttons['to main'].hide()

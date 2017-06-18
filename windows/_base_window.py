@@ -7,13 +7,14 @@ import PyQt5.QtCore as QtCore
 class BaseWindow(QWidget):
     def __init__(self, view, title):
         # TODO: rewrite all size params to init arguments.
-        # In _base_options same thing
+        # TOD): DO IT!!!
         super().__init__()
 
         self.view = view
         self.buttons = {}
         self.labels = {}
         self.label_font = QFont('Times', 10)
+        self.label_size = (100, 30)
 
         self.buttons_size = (100, 50)
         self.pad = (30, 20)
@@ -45,13 +46,16 @@ class BaseWindow(QWidget):
         self.buttons[name].move(*place)
         self.buttons[name].show()
 
-    def init_label(self, name, place, text=None):
-        if text is None:
-            text = name
+    def init_label(self, name, place, text=None,
+                   size=None, font=None):
+        text = default_if_none(text, name)
+        size = default_if_none(size, self.label_size)
+        font = default_if_none(font, self.label_font)
+
         self.labels[name] = QLabel(text, self)
         self.labels[name].move(*place)
-        self.labels[name].resize(*self.label_size)
-        self.labels[name].setFont(self.label_font)
+        self.labels[name].resize(*size)
+        self.labels[name].setFont(font)
         self.labels[name].setAlignment(QtCore.Qt.AlignCenter)
         self.labels[name].show()
 
@@ -70,3 +74,7 @@ class BaseWindow(QWidget):
     @staticmethod
     def connect(event, function, *args, **kwargs):
         event.connect(lambda: function(*args, **kwargs))
+
+
+def default_if_none(value, default):
+    return default if value is None else value

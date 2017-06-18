@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QFont
 import time
 
 
@@ -14,7 +15,10 @@ class Timer:
     def __init__(self, epoch_duration, place, parent,
                  end_epoch_function=None, end_function=None,
                  start_funcion=None):
+        # TODO: make Timer and GameWindow independent
         self.time_left = 0
+        self.label_size = (200, 50)
+        self.label_font = QFont('Times', 20)
         self.epoch_duration = epoch_duration
         self.end_epoch_function = end_epoch_function
         self.end_function = end_function
@@ -27,10 +31,11 @@ class Timer:
         self.epoch_number = epoch_number
 
     def init_gui(self, place):
-        self.parent.init_label('timer', place, self.get_time_left_str())
-        button_place = [place[0] + self.parent.label_size[0]/2 -
+        self.parent.init_label('timer', place, self.get_time_left_str(),
+                               self.label_size, self.label_font)
+        button_place = [place[0] + self.label_size[0]/2 -
                         self.parent.buttons_size[0]/2,
-                        place[1] + self.parent.label_size[1] +
+                        place[1] + self.label_size[1] +
                         self.parent.pad[1]]
         self.parent.init_button('START', button_place)
         self.parent.buttons['START'].clicked.connect(self.run)
@@ -43,7 +48,8 @@ class Timer:
 
         self.epoch_timer = QTimer()
         if self.end_epoch_function is not None:
-            event_function = lambda: self.end_epoch_function(self.time_left)
+            def event_function():
+                self.end_epoch_function(self.time_left)
             self.epoch_timer.timeout.connect(event_function)
         self.epoch_timer.setInterval(second * self.epoch_duration)
 

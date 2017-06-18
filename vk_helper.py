@@ -2,7 +2,7 @@ import vk_api
 import time
 
 
-def _vk_autorization(login, password):
+def vk_autorization(login, password):
     """
     Returns client authtorized with login and password
     """
@@ -11,7 +11,7 @@ def _vk_autorization(login, password):
     return vk
 
 
-def _write_vk_message(vk, user_id, message):
+def write_vk_message(vk, user_id, message):
     """
     Sends message to user with user_id from client
     """
@@ -30,5 +30,5 @@ def newsletter(vk_client, users_id, messages):
         messages = [messages] * len(users_id)
 
     for user_id, message in zip(users_id, messages):
-        _write_vk_message(vk_client, user_id, message)
+        write_vk_message(vk_client, user_id, message)
         time.sleep(0.5)

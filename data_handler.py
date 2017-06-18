@@ -32,6 +32,7 @@ class DataHandler:
                          self.location_columns[0])
 
     def _add_to_csv(self, path, row, key_columns):
+        # BUG! If location were in dataset, this method anyway add it
         old_dataframe = pd.read_csv(path, sep=self.separator)
         columns = old_dataframe.columns
         keys = old_dataframe[key_columns].values.reshape(-1)
@@ -55,14 +56,17 @@ class DataHandler:
 
     def _rewrite_csv(self, path, data, columns):
         new_dataframe = pd.DataFrame(data, columns=columns)
-        new_dataframe.to_csv(path, sep=self.separator, index=False, header=True)
+        new_dataframe.to_csv(path, sep=self.separator, index=False,
+                             header=True)
 
     def get_players(self):
         return pd.read_csv(self.players_path, header=0,
                            sep=self.separator).values
 
     def get_settings(self):
-        settings = pd.read_csv(self.locations_path, header=0,
+        settings = pd.read_csv(self.locations_path,
+                               header=0,
                                sep=self.separator).values
-        return [{'location': location, 'roles': roles.split(self.role_delimiter)}
+        return [{'location': location,
+                 'roles': roles.split(self.role_delimiter)}
                 for location, roles in settings]
