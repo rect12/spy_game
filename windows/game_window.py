@@ -26,11 +26,11 @@ class GameWindow(BaseWindow):
     def init_buttons(self):
         place = [self.size().width()/2 - self.buttons_size[0]/2,
                  self.size().height() - self.pad[1] - self.buttons_size[1]]
-        event_method = self.view.window_change
-        event_function = lambda: event_method(self, self.view.windows['main'])
-        self.init_button('to main',
-                         event_function,
-                         place)
+        self.init_button('to main', place)
+        self.connect(self.buttonss['to main'].clicked,
+                     self.view.window_change,
+                     self,
+                     self.view.windows['main'])
 
     def to_game(self):
         self.timer.set_epoch_number(self.view.get_duration())

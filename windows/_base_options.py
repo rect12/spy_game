@@ -20,28 +20,14 @@ class BaseOptionsWindow(BaseWindow):
 
     def init_buttons(self):
         places = self.get_buttons_places()
-        click_method = self.view.window_change
-        click_function = lambda: click_method(self, self.view.windows['main'])
-        self.init_button('to main page',
-                         click_function,
-                         places[1])
-        self.init_button('to game', self.view.to_game, places[0])
+        self.init_button('to main', places[1])
+        self.connect(self.buttons['to main'].clicked,
+                     self.view.window_change,
+                     self,
+                     self.view.windows['main'])
 
-    def init_line_edit(self, text, place):
-        # TODO: maybe should move it to BaseWindow
-        self.line_edits.append(QLineEdit(str(text), self))
-        self.line_edits[-1].resize(*self.line_edit_size)
-        self.line_edits[-1].move(*place)
-        self.line_edits[-1].show()
-
-    def init_check_box(self, place, click_function=None):
-        # TODO: maybe should move it to BaseWindow
-        self.check_boxes.append(QCheckBox(self))
-        self.check_boxes[-1].move(*place)
-        self.check_boxes[-1].resize(*self.check_box_size)
-        if click_function is not None:
-            self.check_boxes[-1].stateChanged.connect(click_function)
-        self.check_boxes[-1].show()
+        self.init_button('to game', places[0])
+        self.connect(self.buttons['to game'].clicked, self.view.to_game)
 
     def recover_geometry(self):
         # TODO: maybe should move it to BaseWindow

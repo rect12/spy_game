@@ -9,15 +9,14 @@ class View:
     def __init__(self, game, players, settings):
         self.game = game
         self.application = QApplication(sys.argv)
-        window_classes = [MainWindow, GameOptionsWindow,SettingOptionsWindow, PlayerOptionsWindow,
-                          GameWindow]
-        init_arguments = [{},  {},
-                          {'settings': settings}, {'players': players},{}]
+        window_classes = [MainWindow, PlayerOptionsWindow, GameOptionsWindow,
+                          SettingOptionsWindow, GameWindow]
+        init_arguments = [{}, {'players': players}, {},
+                          {'settings': settings}, {}]
 
         self.windows = {name: window(self, **kwargs)
                         for name, window, kwargs
                         in zip(WINDOWS, window_classes, init_arguments)}
-        print(WINDOWS)
 
         for window in self.windows.values():
             window._post_init()

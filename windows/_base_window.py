@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget, QLabel
+from PyQt5.QtWidgets import QLineEdit, QCheckBox
 from PyQt5.QtGui import QFont
 import PyQt5.QtCore as QtCore
 
@@ -36,11 +37,10 @@ class BaseWindow(QWidget):
     def init_buttons(self):
         pass
 
-    def init_button(self, name, click_function, place, title=None):
+    def init_button(self, name, place, title=None):
         if title is None:
             title = name.capitalize()
         self.buttons[name] = QPushButton(title, self)
-        self.buttons[name].clicked.connect(click_function)
         self.buttons[name].resize(*self.buttons_size)
         self.buttons[name].move(*place)
         self.buttons[name].show()
@@ -54,3 +54,19 @@ class BaseWindow(QWidget):
         self.labels[name].setFont(self.label_font)
         self.labels[name].setAlignment(QtCore.Qt.AlignCenter)
         self.labels[name].show()
+
+    def init_line_edit(self, text, place):
+        self.line_edits.append(QLineEdit(str(text), self))
+        self.line_edits[-1].resize(*self.line_edit_size)
+        self.line_edits[-1].move(*place)
+        self.line_edits[-1].show()
+
+    def init_check_box(self, place):
+        self.check_boxes.append(QCheckBox(self))
+        self.check_boxes[-1].move(*place)
+        self.check_boxes[-1].resize(*self.check_box_size)
+        self.check_boxes[-1].show()
+
+    @staticmethod
+    def connect(event, function, *args, **kwargs):
+        event.connect(lambda: function(*args, **kwargs))

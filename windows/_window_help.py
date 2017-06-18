@@ -32,7 +32,8 @@ class Timer:
                         self.parent.buttons_size[0]/2,
                         place[1] + self.parent.label_size[1] +
                         self.parent.pad[1]]
-        self.parent.init_button('START', self.run, button_place)
+        self.parent.init_button('START', button_place)
+        self.parent.buttons['START'].clicked.connect(self.run)
 
     def init_timers(self):
         second = 1000  # in ms

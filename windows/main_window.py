@@ -14,15 +14,15 @@ class MainWindow(BaseWindow):
                     self.buttons_number * self.buttons_size[1])
 
     def init_buttons(self):
-        # TODO: BUGFIX!!! All options buttons shows last option
-        names = WINDOWS[1:]
-        click_method = self.view.window_change
-        click_functions = [lambda: click_method(self, self.view.windows[name])
-                           for name in names[:-1]]
-        click_functions.append(self.view.to_game)
-
-        for ind, (name, click_func) in enumerate(zip(names, click_functions)):
+        for ind, name in enumerate(WINDOWS[1:]):
             vertical_size = self.buttons_size[1] + self.pad[1]
             vertical_shift = self.pad[1] + ind*vertical_size
             place = (self.pad[0], vertical_shift)
-            self.init_button(name, click_func, place)
+            self.init_button(name, place)
+            if name == 'game':
+                self.connect(self.buttons[name].clicked, self.view.to_game)
+            else:
+                self.connect(self.buttons[name].clicked,
+                             self.view.window_change,
+                             self,
+                             self.view.windows[name])
