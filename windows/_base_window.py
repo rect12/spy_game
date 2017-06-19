@@ -1,13 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget, QLabel
 from PyQt5.QtWidgets import QLineEdit, QCheckBox
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QFontMetrics
 import PyQt5.QtCore as QtCore
 
 
 class BaseWindow(QWidget):
     def __init__(self, view, title):
         # TODO: rewrite all size params to init arguments.
-        # TOD): DO IT!!!
+        # TODO: DO IT!!!
         super().__init__()
 
         self.view = view
@@ -49,14 +49,20 @@ class BaseWindow(QWidget):
     def init_label(self, name, place, text=None,
                    size=None, font=None):
         text = default_if_none(text, name)
-        size = default_if_none(size, self.label_size)
-        font = default_if_none(font, self.label_font)
-
         self.labels[name] = QLabel(text, self)
-        self.labels[name].move(*place)
-        self.labels[name].resize(*size)
+
+        font = default_if_none(font, self.label_font)
         self.labels[name].setFont(font)
+
+        font_metrics = self.labels[name].fontMetrics()
+        default_size = (max(font_metrics.width(text), self.label_size[0]),
+                        self.label_size[1])
+        size = default_if_none(size, default_size)
+        self.labels[name].resize(*size)
+
+        self.labels[name].move(*place)
         self.labels[name].setAlignment(QtCore.Qt.AlignCenter)
+
         self.labels[name].show()
 
     def init_line_edit(self, text, place):

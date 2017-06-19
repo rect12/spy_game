@@ -44,6 +44,9 @@ class Game:
         return self.players[randint(0, len(self.players) - 1)]
 
     def send_start_messages(self):
+        pass
+
+    def _send_start_messages(self):
         role_message = "\nТвоя роль: {}"
         locaion_message = "\nТекущая локация: {}".format(self.location)
         messages = ['Скоро начнется сеанс игры The Spy!' +
@@ -70,14 +73,17 @@ class Game:
                                                  minute_end)
         newsletter(self.vk_client, self.get_players_id(), message)
 
-    def game_over(self):
+    def game_over(self, stopped):
         self.view.game_over()
         spy_name = self.players[self.roles.index(SPY)][0]
 
-        message = ('Время вышло! Игра окончена. ' +
-                   'Победил шпион - {}!'.format(spy_name) +
-                   '\nВсе это время мы находились в локации ' +
-                   '{}'.format(self.location))
+        if stopped:
+            message = 'Таймер остановлен. Игра окончена.'
+        else:
+            message = ('Время вышло! Игра окончена. ' +
+                       'Победил шпион - {}!'.format(spy_name))
+        message += ('\nВсе это время мы находились в локации ' +
+                    '{}'.format(self.location))
         for player, role in zip(self.get_players_names(), self.roles):
             message += '\n{} играл роль "{}"'.format(player, role)
 

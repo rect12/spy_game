@@ -58,9 +58,9 @@ class View:
     def game_over(self):
         self.windows['game'].buttons['to main'].show()
 
-    def add_new_line(self, line_edit, window):
+    def add_new_line(self, line_edit):
         line_edit.textEdited.disconnect()
-        window.init_new_line()
+        line_edit.parent().init_new_line()
 
     def window_change(self, first_window, second_window):
         first_window.hide()
@@ -86,14 +86,14 @@ class View:
             line_edit.cursorPositionChanged.connect(event_function)
             line_edit.editingFinished.disconnect()
 
-    def allow_only_numbers(self, line_edit, window):
+    def allow_only_numbers(self, line_edit):
         if line_edit.text().isdigit():
             error = ''
         else:
             line_edit.setText('')
             error = 'Time should be an integer'
 
-        window.labels['error'].setText(error)
+        line_edit.parent().labels['error'].setText(error)
 
     def start_game(self):
         self.windows['game'].buttons['to main'].hide()

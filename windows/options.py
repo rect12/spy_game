@@ -5,6 +5,8 @@ import pandas as pd
 
 
 class PlayerOptionsWindow(BaseOptionsWindow):
+    # TODO: Change lines_number in SettingOptionsWindow according to
+    # players number
     def __init__(self, view, players):
         super().__init__(view, 'Player options')
         self.init_player_lines(players)
@@ -32,9 +34,9 @@ class PlayerOptionsWindow(BaseOptionsWindow):
                     in zip(self.pad, [ind_x, ind_y], self.line_edit_size)]
             self.init_line_edit(text, move)
             if is_last and ind_x == 0:
-                def edit_function():
-                    self.view.add_new_line(self.line_edits[-1], self)
-                self.line_edits[-1].textEdited.connect(edit_function)
+                self.connect(self.line_edits[-1].textEdited,
+                             self.view.add_new_line,
+                             self.line_edits[-1])
 
         if need_check_box:
             move = [self.pad[0]*3 + self.line_edit_size[0]*2,
@@ -67,12 +69,9 @@ class GameOptionsWindow(BaseOptionsWindow):
         place = [self.pad[0]*2 + self.label_size[0],
                  label_place[1]]
         self.init_line_edit('10', place)
-        event_method = self.view.allow_only_numbers
-
-        def event_function():
-            event_method(self.line_edits[-1], self)
-
-        self.line_edits[-1].textEdited.connect(event_function)
+        self.connect(self.line_edits[-1].textEdited,
+                     self.view.allow_only_numbers,
+                     self.line_edits[-1])
 
 
 class SettingOptionsWindow(BaseOptionsWindow):
@@ -91,35 +90,24 @@ class SettingOptionsWindow(BaseOptionsWindow):
     def init_location_line(self):
         # TODO: remove this method. Put its logic to init_new_line
         self.init_line_edit(LOCATION, self.pad)
+        self.connect(self.line_edits[-1].textEdited,
+                     self.view.add_new_line,
+                     self.line_edits[-1])
 
-        def edit_function():
-            self.view.add_new_line(self.line_edits[-1], self)
-
-        self.line_edits[-1].textEdited.connect(edit_function)
-
-        event_method = self.view.delete_default_text
-
-        def event_function():
-            event_method(self.line_edits[-1], LOCATION)
-
-        self.line_edits[-1].cursorPositionChanged.connect(event_function)
+        self.connect(self.line_edits[-1].cursorPositionChanged,
+                     self.view.delete_default_text,
+                     self.line_edits[-1], LOCATION)
         self.set_geometry()
 
     def init_new_line(self):
         shift = self.line_edit_size[1] + self.pad[1]
         y_move = len(self.line_edits)*shift + self.pad[1]
         self.init_line_edit(ROLE, [self.pad[0], y_move])
-
-        def edit_function():
-            self.view.add_new_line(self.line_edits[-1], self)
-
-        self.line_edits[-1].textEdited.connect(edit_function)
-
-        event_method = self.view.delete_default_text
-
-        def event_function():
-            event_method(self.line_edits[-1], ROLE)
-
-        self.line_edits[-1].cursorPositionChanged.connect(event_function)
+        self.connect(self.line_edits[-1].textEdited,
+                     self.view.add_new_line,
+                     self.line_edits[-1])
+        self.connect(self.line_edits[-1].cursorPositionChanged,
+                     self.view.delete_default_text,
+                     self.line_edits[-1], ROLE)
 
         self.recover_geometry()
