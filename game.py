@@ -44,9 +44,6 @@ class Game:
         return self.players[randint(0, len(self.players) - 1)]
 
     def send_start_messages(self):
-        pass
-
-    def _send_start_messages(self):
         role_message = "\nТвоя роль: {}"
         locaion_message = "\nТекущая локация: {}".format(self.location)
         messages = ['Скоро начнется сеанс игры The Spy!' +
