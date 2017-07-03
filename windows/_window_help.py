@@ -101,14 +101,14 @@ class Timer:
         self.small_timer.timeout.connect(self._tick)
         self.small_timer.setInterval(self.tick_duration)
 
-        self.epoch_timer = QTimer()
-        if self.end_epoch_function is not None:
+        # self.epoch_timer = QTimer()
+        # if self.end_epoch_function is not None:
 
-            def event_function():
-                self.end_epoch_function(self.time_left)
+            # def event_function():
+                # self.end_epoch_function(self.time_left)
 
-            self.epoch_timer.timeout.connect(event_function)
-        self.epoch_timer.setInterval(self.tick_duration * self.epoch_duration)
+            # self.epoch_timer.timeout.connect(event_function)
+        # self.epoch_timer.setInterval(self.tick_duration * self.epoch_duration)
 
     def start(self):
         self.time_left = self.epoch_duration * self.epoch_number
@@ -117,11 +117,11 @@ class Timer:
             self.start_funcion()
 
         self.small_timer.start()
-        self.epoch_timer.start()
+        # self.epoch_timer.start()
 
     def stop(self):
         self.small_timer.stop()
-        self.epoch_timer.stop()
+        # self.epoch_timer.stop()
         if self.end_function is not None:
             self.end_function(True)
 
@@ -130,10 +130,14 @@ class Timer:
 
     def _tick(self):
         self.time_left -= 1
+        if (self.time_left % self.epoch_duration == 0 and
+                self.time_left != 0):
+            self.end_epoch_function(self.time_left)
+
         self.update_label()
         if self.time_left == 0:
             self.small_timer.stop()
-            self.epoch_timer.stop()
+            # self.epoch_timer.stop()
             if self.end_function is not None:
                 self.end_function(False)
 
